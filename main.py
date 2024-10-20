@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 
 # Configuration
 base_url = 'https://financialmodelingprep.com/api'
-API_KEY = 'RT4KNsVg94VGwROqndNne28D92vrYcf2'
+API_KEY = 'xu2Xh5xcSrglcMecHrV30YOgf71pnFpg'
 GROQ = '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'  # Replace with your actual GROQ API key
 
 st.set_page_config(layout="wide")
@@ -50,14 +50,14 @@ def create_plot(x, y, title, y_axis_title):
     return fig
 def get_ai_insight(ticker, data, year_range, metric):
     if len(year_range) == 1:
-        prompt = f"Analyze the {metric} data point for {ticker} in {year_range[0]}. The value is {data[0]}. Provide insights on this specific data point, its significance, and how it compares to industry standards or the company's historical performance. Consider any relevant macroeconomic factors or company-specific news from this period that might explain this value."
+        prompt = f"Analyze the {metric} data point for {ticker} in {year_range[0]}. The value is {data[0]}. Provide insights on this specific data point, its significance, and how it compares to industry standards or the company's historical performance. Most importantly, you are to only utilize specific company performance data from the dataset that we have provided from financialmodelingprep.com. Consider any relevant macroeconomic factors or company specific factors from this period that might explain this value. Make the information as concise as possible. Most importantly, you are to only utilize specific company performance data from the dataset that we have provided from financialmodelingprep.com."
     else:
-        prompt = f"Analyze the {metric} data for {ticker} from {year_range[0]} to {year_range[1]}. The data is {data}. Provide insights on significant trends, potential causes, and implications for the company's financial health. Consider macroeconomic factors and industry-specific news that might have influenced these changes."
+        prompt = f"Analyze the {metric} data for {ticker} from {year_range[0]} to {year_range[1]}. The data is {data}. Provide insights on this specific data point, its significance, and how it compares to industry standards or the company's historical performance. Most importantly, you are to only utilize specific company performance data from the dataset that we have provided from financialmodelingprep.com. Consider any relevant macroeconomic factors or company specific factors from this period that might explain this value. Make the information as concise as possible. Most importantly, you are to only utilize specific company performance data from the dataset that we have provided from financialmodelingprep.com."
     
     response = client.chat.completions.create(
         model="mixtral-8x7b-32768",
         messages=[
-            {"role": "system", "content": "You are a financial and economic expert that is not only an expert on the operations of individual companies on a year to year basis, but also extremely knowledge in how macroeconomic trends and global events could impact a company's performance. You are to provide insight on a company's performance and how it may have been effected by certain events during the time period. You are also to compare the year's performance to previous year's performance and determine whether certain events led to a difference in year to year performance. Also make future projections based on the current trend. Make the information as concise as possible. Most importantly, you are to ONLY pull company performance numbers from the data that WE have provided from financialmodelingprep.com. Also, make sure the text is uniform in size and font."},
+            {"role": "system", "content": "Provide insights on this specific data point, its significance, and how it compares to industry standards or the company's historical performance. Most importantly, you are to only utilize specific company performance data from the dataset that we have provided from financialmodelingprep.com. Consider any relevant macroeconomic factors or company specific factors from this period that might explain this value. Make the information as concise as possible. Most importantly, you are to only utilize specific company performance data from the dataset that we have provided from financialmodelingprep.com."},
             {"role": "user", "content": prompt}
         ]
     )
@@ -112,6 +112,14 @@ st.header(f"Financial Metrics for {ticker}")
 
 col1, col2 = st.columns(2)
 
+def display_styled_insight(insight):
+    styled_insight = f"""
+    <div style="font-family: SF Pro, sans-serif; font-size: 15px;">
+    {insight}
+    </div>
+    """
+    st.markdown(styled_insight, unsafe_allow_html=True)
+
 for i, (metric_name, metric_data) in enumerate(metrics):
     with col1 if i % 2 == 0 else col2:
         fig = create_plot(years, metric_data, f'{metric_name} Over Time', metric_name)
@@ -122,5 +130,5 @@ for i, (metric_name, metric_data) in enumerate(metrics):
             hovered_value = hovered_points[0]['y']
             
             insight = get_ai_insight(ticker, [hovered_value], [hovered_year], metric_name)
-            st.write(f"AI Analyst Insight for {metric_name} ({hovered_year}):")
-            st.write(insight)
+            display_styled_insight(f"AI Analyst Insight for {metric_name} ({hovered_year}):")
+            display_styled_insight(insight)
