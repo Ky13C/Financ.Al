@@ -1,4 +1,9 @@
 pandas
 plotly
-dash
+requests
+streamlit
+plotly.express
+os
 groq
+streamlit_plotly_events
+plotly.graph_objects
