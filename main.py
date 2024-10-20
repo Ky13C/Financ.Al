@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 
 # Configuration
 base_url = 'https://financialmodelingprep.com/api'
-API_KEY = 'ryodgIkrCLx1d1yQm8o7TZGYJRKtIgqI'
+API_KEY = 'RT4KNsVg94VGwROqndNne28D92vrYcf2'
 GROQ = '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'  # Replace with your actual GROQ API key
 
 st.set_page_config(layout="wide")
@@ -57,7 +57,7 @@ def get_ai_insight(ticker, data, year_range, metric):
     response = client.chat.completions.create(
         model="mixtral-8x7b-32768",
         messages=[
-            {"role": "system", "content": "You are a financial analyst providing insights on company performance."},
+            {"role": "system", "content": "You are a financial and economic expert that is not only an expert on the operations of individual companies on a year to year basis, but also extremely knowledge in how macroeconomic trends and global events could impact a company's performance. You are to provide insight on a company's performance and how it may have been effected by certain events during the time period. You are also to compare the year's performance to previous year's performance and determine whether certain events led to a difference in year to year performance. Also make future projections based on the current trend. Make the information as concise as possible. Most importantly, you are to ONLY pull company performance numbers from the data that WE have provided from financialmodelingprep.com. Also, make sure the text is uniform in size and font."},
             {"role": "user", "content": prompt}
         ]
     )
@@ -122,5 +122,5 @@ for i, (metric_name, metric_data) in enumerate(metrics):
             hovered_value = hovered_points[0]['y']
             
             insight = get_ai_insight(ticker, [hovered_value], [hovered_year], metric_name)
-            st.write(f"AI Insight for {metric_name} ({hovered_year}):")
+            st.write(f"AI Analyst Insight for {metric_name} ({hovered_year}):")
             st.write(insight)
