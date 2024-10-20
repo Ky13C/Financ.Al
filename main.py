@@ -7,7 +7,7 @@ import os
 from streamlit_plotly_events import plotly_events
 
 base_url = 'https://financialmodelingprep.com/api'
-API_KEY = 'gueI3DrDFSZOHCrY67gVrL1QbaWXciFf'
+API_KEY = 'ec2letPFIDhtcs86wM4eQcZ4WAXLuB7y'
 GROQ = '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'  # Replace with your actual OpenAI API key
 
 st.set_page_config(layout="wide")
@@ -19,8 +19,25 @@ client = Groq(api_key=GROQ)
 
 def get_financial_data(statement_type):
     url = f'{base_url}/v3/{statement_type}/{ticker}?period=annual&limit=5&apikey={API_KEY}'
-    response = requests.get(url)
-    return response.json()
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raises an HTTPError for bad responses
+        data = response.json()
+
+        if isinstance(data, str):
+            st.error(f"Error in {statement_type} data: {data}")
+            return []
+        elif isinstance(data, list) and len(data) > 0:
+            return data
+        else:
+            st.error(f"Invalid data format for {statement_type}")
+            return []
+    except requests.exceptions.RequestException as e:
+        st.error(f"Error fetching {statement_type} data: {e}")
+        return []
+    except ValueError as e:
+        st.error(f"Error parsing JSON for {statement_type}: {e}")
+        return []
 
 def create_plot(x, y, title, y_axis_title):
     fig = px.bar(x=x, y=y, title=title)  # Changed from px.line to px.bar
@@ -46,19 +63,28 @@ balance_sheet_data = get_financial_data('balance-sheet-statement')
 cash_flow_data = get_financial_data('cash-flow-statement')
 
 # Process data
-years = [data['date'][:4] for data in income_data]
-revenue = [data['revenue'] for data in income_data]
-eps = [data['eps'] for data in income_data]
-gross_profit_ratio = [data['grossProfitRatio'] for data in income_data] 
-net_income_ratio = [data['netIncomeRatio'] for data in income_data] 
-net_income = [data['netIncome'] for data in income_data]
-total_assets = [data['totalAssets'] for data in balance_sheet_data]
-total_liabilities = [data['totalLiabilities'] for data in balance_sheet_data]
-operating_cash_flow = [data['operatingCashFlow'] for data in cash_flow_data]
-free_cash_flow = [data['freeCashFlow'] for data in cash_flow_data]
-total_current_assets = [data['totalCurrentAssets'] for data in balance_sheet_data] 
-total_current_liabilities = [data['totalCurrentLiabilities'] for data in balance_sheet_data]
-liquidity = [int(a)/int(b) for a,b in zip(total_current_assets, total_current_liabilities)]
+if income_data and balance_sheet_data and cash_flow_data:
+    try:
+        years = [data['date'][:4] for data in income_data]
+        revenue = [data['revenue'] for data in income_data]
+        eps = [data['eps'] for data in income_data]
+        gross_profit_ratio = [data['grossProfitRatio'] for data in income_data] 
+        net_income_ratio = [data['netIncomeRatio'] for data in income_data] 
+        net_income = [data['netIncome'] for data in income_data]
+        total_assets = [data['totalAssets'] for data in balance_sheet_data]
+        total_liabilities = [data['totalLiabilities'] for data in balance_sheet_data]
+        operating_cash_flow = [data['operatingCashFlow'] for data in cash_flow_data]
+        free_cash_flow = [data['freeCashFlow'] for data in cash_flow_data]
+        total_current_assets = [data['totalCurrentAssets'] for data in balance_sheet_data] 
+        total_current_liabilities = [data['totalCurrentLiabilities'] for data in balance_sheet_data]
+        liquidity = [int(a)/int(b) for a,b in zip(total_current_assets, total_current_liabilities)]
+    except (KeyError, TypeError) as e:
+        st.error(f"Error processing financial data: {e}")
+        st.error("Please check the API response format and ensure all required fields are present.")
+        years, revenue, eps, gross_profit_ratio, net_income_ratio, net_income, total_assets, total_liabilities, operating_cash_flow, free_cash_flow, total_current_assets, total_current_liabilities, liquidity = ([] for _ in range(13))
+else:
+    st.error("Some or all financial data is missing. Please check the API response.")
+    years, revenue, eps, gross_profit_ratio, net_income_ratio, net_income, total_assets, total_liabilities, operating_cash_flow, free_cash_flow, total_current_assets, total_current_liabilities, liquidity = ([] for _ in range(13))
 
 # Create and display graphs with AI insights
 st.header(f"Financial Metrics for {ticker}")
