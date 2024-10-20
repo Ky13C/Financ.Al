@@ -6,6 +6,7 @@ from groq import Groq
 import os
 from streamlit_plotly_events import plotly_events
 import plotly.graph_objects as go
+import random
 
 # Configuration
 base_url = 'https://financialmodelingprep.com/api'
@@ -45,9 +46,19 @@ def get_financial_data(statement_type):
         return []
 
 def create_plot(x, y, title, y_axis_title):
-    fig = px.bar(x=x, y=y, title=title)
+    colors = [
+        '#8dd3c7', '#ffffb3', '#bebada', '#fb8072', '#80b1d3',
+        '#fdb462', '#b3de69', '#fccde5', '#d9d9d9', '#bc80bd',
+        '#ccebc5', '#ffed6f', '#aec7e8', '#c7c7c7', '#dbdb8d'
+    ]
+    
+    color_index = hash(title) % len(colors)
+    color = colors[color_index]
+    
+    fig = px.bar(x=x, y=y, title=title, color_discrete_sequence=[color])
     fig.update_layout(xaxis_title='Year', yaxis_title=y_axis_title)
     return fig
+
 def get_ai_insight(ticker, data, year_range, metric):
     if len(year_range) == 1:
         prompt = f"Analyze the {metric} data point for {ticker} in {year_range[0]}. The value is {data[0]}. Provide insights on this specific data point, its significance, and how it compares to industry standards or the company's historical performance. Most importantly, you are to only utilize specific company performance data from the dataset that we have provided from financialmodelingprep.com. Consider any relevant macroeconomic factors or company specific factors from this period that might explain this value. Make the information as concise as possible. Most importantly, you are to only utilize specific company performance data from the dataset that we have provided from financialmodelingprep.com."
@@ -132,3 +143,4 @@ for i, (metric_name, metric_data) in enumerate(metrics):
             insight = get_ai_insight(ticker, [hovered_value], [hovered_year], metric_name)
             display_styled_insight(f"AI Analyst Insight for {metric_name} ({hovered_year}):")
             display_styled_insight(insight)
+
