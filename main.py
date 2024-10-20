@@ -30,11 +30,17 @@ cash_flow_data = get_financial_data('cash-flow-statement')
 # Process data
 years = [data['date'][:4] for data in income_data]
 revenue = [data['revenue'] for data in income_data]
+eps = [data['eps'] for data in income_data]
+gross_profit_ratio = [data['grossProfitRatio'] for data in income_data] 
+net_income_ratio = [data['netIncomeRatio'] for data in income_data] 
 net_income = [data['netIncome'] for data in income_data]
 total_assets = [data['totalAssets'] for data in balance_sheet_data]
 total_liabilities = [data['totalLiabilities'] for data in balance_sheet_data]
 operating_cash_flow = [data['operatingCashFlow'] for data in cash_flow_data]
 free_cash_flow = [data['freeCashFlow'] for data in cash_flow_data]
+total_current_assets = [data['totalCurrentAssets'] for data in balance_sheet_data] 
+total_current_liabilities = [data['totalCurrentLiabilities'] for data in balance_sheet_data]
+liquidity = [int(a)/int(b) for a,b in zip(total_current_assets, total_current_liabilities)]
 # Create and display graphs
 st.header(f"Financial Metrics for {ticker}")
 
@@ -42,10 +48,14 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.plotly_chart(create_plot(years, revenue, 'Revenue Over Time', 'Revenue ($)'), use_container_width=True)
-    st.plotly_chart(create_plot(years, total_assets, 'Total Assets Over Time', 'Total Assets ($)'), use_container_width=True)
-    st.plotly_chart(create_plot(years, operating_cash_flow, 'Operating Cash Flow Over Time', 'Operating Cash Flow ($)'), use_container_width=True)
+    st.plotly_chart(create_plot(years, eps, 'Earnings Per Share Over Time', 'EPS'), use_container_width=True)
+    st.plotly_chart(create_plot(years, gross_profit_ratio, 'Gross Profit Ratio Over Time', 'GP Ratio'), use_container_width=True)
+    st.plotly_chart(create_plot(years, net_income, 'Net Income Over Time', 'Net Income ($)'), use_container_width=True)
+    st.plotly_chart(create_plot(years, net_income_ratio, 'Net Income Ratio Over Time', 'Net Income Ratio'), use_container_width=True)
 
 with col2:
-    st.plotly_chart(create_plot(years, net_income, 'Net Income Over Time', 'Net Income ($)'), use_container_width=True)
     st.plotly_chart(create_plot(years, total_liabilities, 'Total Liabilities Over Time', 'Total Liabilities ($)'), use_container_width=True)
+    st.plotly_chart(create_plot(years, total_assets, 'Total Assets Over Time', 'Total Assets ($)'), use_container_width=True)
     st.plotly_chart(create_plot(years, free_cash_flow, 'Free Cash Flow Over Time', 'Free Cash Flow ($)'), use_container_width=True)
+    st.plotly_chart(create_plot(years, liquidity, 'Current Ratio Over Time', 'Current Ratio'), use_container_width=True)
+    st.plotly_chart(create_plot(years, operating_cash_flow, 'Operating Cash Flow Over Time', 'Operating Cash Flow ($)'), use_container_width=True)
