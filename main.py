@@ -10,7 +10,7 @@ import random
 
 # Configuration
 base_url = 'https://financialmodelingprep.com/api'
-API_KEY = 'xu2Xh5xcSrglcMecHrV30YOgf71pnFpg'
+API_KEY = 'REPLACE-WITH-YOUR-FINANCIALMODELINGPREP-API-KEY' # https://site.financialmodelingprep.com Grab a Free API Key
 GROQ = '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'  # Replace with your actual GROQ API key
 
 st.set_page_config(layout="wide")
