@@ -1,5 +1,7 @@
 # Financ!al 
 
+(This was a CalHacks2024 Project)
+
 Financial statements contain information critical to determining a company’s health. AI generated context makes information accessible, analyzing financial and economic contexts to explain trends.
 
 The program contextualizes financial statements from time series bar graphs of financial statement data using AI upon cursor hover of a graph, it attempts to provides both micro (company & industry) and macroeconomic (Fed policy & global) contexts.
