@@ -24,4 +24,4 @@ Compare Trends Overtime: Determine Bubbles Before Investing
 
 
 
-*Not financial advice, please perform your own Due Dilligence. AI could hallucinate as project was bootstrapped in a day. Utilize with Caution*
+*Not financial advice, please perform your own due dilligence. AI could hallucinate as project was bootstrapped in a day. Utilize with soft caution!*
