@@ -1,6 +1,6 @@
 # Financ!al 
 
-(This was a CalHacks2024 Project: (https://devpost.com/software/ai-powered-context-generator-for-financial-statements))
+(This was a CalHacks2024 Project: https://devpost.com/software/ai-powered-context-generator-for-financial-statements)
 
 Financial statements contain information critical to determining a company’s health. AI generated context makes information accessible, analyzing financial and economic contexts to explain trends.
 
