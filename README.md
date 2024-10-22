@@ -19,9 +19,12 @@ AI Analyst Provides Relevant and Critical Information
 Compare Trends Overtime: Determine Bubbles Before Investing
 
 
-
-
-
+To run, ensure you have Python 3.4+ (pip comes installed by default)
+Download/clone the entire project
+Open Terminal
+CD into the downloaded/cloned folder
+"pip install -r requirements.txt" through Terminal
+"streamlit run main.py" to run the program
 
 
 *Not financial advice, please perform your own due dilligence. AI could hallucinate as project was bootstrapped in a day. Utilize with soft caution!*
