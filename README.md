@@ -17,3 +17,11 @@ AI Analyst Provides Relevant and Critical Information
 
 ![alt text](https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/003/093/322/datas/original.png)
 Compare Trends Overtime: Determine Bubbles Before Investing
+
+
+
+
+
+
+
+*Not financial advice, please perform your own Due Dilligence. AI could hallucinate as project was bootstrapped in a day. Utilize with Caution*
